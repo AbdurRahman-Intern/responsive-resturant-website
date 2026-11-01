@@ -5,4 +5,5 @@ import react from "@vitejs/plugin-react";
 // TODO: If you deploy under a sub-path (e.g. example.com/saffron/), set base: "/saffron/".
 export default defineConfig({
   plugins: [react()],
+  base: "/responsive-resturant-website/",
 });
