@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   DESIGN TOKENS
+   Colors are stored as "R G B" numbers so Tailwind can add opacity
+   (e.g. bg-accent/10). restaurant.js can override these at runtime
+   (see src/app/App.jsx -> applyBrandColors).
+   ------------------------------------------------------------------ */
+:root {
+  --color-cream: 247 241 229;
+  --color-sand: 236 227 208;
+  --color-charcoal: 38 34 31;
+  --color-muted: 98 91 84;
+  --color-accent: 154 59 31;
+  --color-accent-dark: 120 42 20;
+  --color-olive: 84 98 60;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Leaves space under the sticky navbar when jumping to #sections */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-cream font-body text-charcoal antialiased;
+  }
+
+  /* RTL languages (Dari / Pashto): App.jsx sets dir="rtl" on <html>.
+     We switch to an Arabic-script font for ALL text, including headings. */
+  [dir="rtl"] body,
+  [dir="rtl"] .font-display,
+  [dir="rtl"] .font-body {
+    font-family: "Vazirmatn", system-ui, sans-serif;
+  }
+
+  /* Arabic-script text needs a little more line height to stay readable */
+  [dir="rtl"] body {
+    line-height: 1.8;
+  }
+
+  /* Visible keyboard focus everywhere */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+    outline-style: solid;
+  }
+}
+
+@layer components {
+  /* Typography scale - use these classes instead of random text sizes */
+  .text-hero {
+    @apply font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl;
+  }
+  .text-section {
+    @apply font-display text-3xl font-semibold leading-tight sm:text-4xl;
+  }
+  .text-card-title {
+    @apply font-display text-lg font-semibold leading-snug;
+  }
+  .text-price {
+    @apply font-display text-lg font-semibold text-accent-dark;
+  }
+  .text-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-accent;
+  }
+  /* Arabic-script headings need more line height than Latin ones, otherwise
+     marks above and below the letters collide when a title wraps */
+  [dir="rtl"] .text-hero,
+  [dir="rtl"] .text-section,
+  [dir="rtl"] .text-card-title {
+    line-height: 1.55;
+  }
+  /* Arabic script looks wrong with letter-spacing, so remove it for RTL */
+  [dir="rtl"] .text-eyebrow {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 0.85rem;
+  }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Cart drawer + mobile menu slide-in */
+@keyframes slide-in-start {
+  from { transform: translateX(var(--slide-from, 100%)); }
+  to { transform: translateX(0); }
+}
+.animate-drawer {
+  animation: slide-in-start 0.25s ease-out;
+}
+[dir="ltr"] .animate-drawer { --slide-from: 100%; }
+[dir="rtl"] .animate-drawer { --slide-from: -100%; }
